@@ -11,23 +11,24 @@ jobs:
         python-version: [3.8, 3.9]
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Select Python version manually
-      id: set-python
-      run: |
-        if [ "${{ matrix.python-version }}" = "3.8" ]; then
-          echo "PYBIN=/usr/local/bin/python3.8" >> $GITHUB_ENV
-        elif [ "${{ matrix.python-version }}" = "3.9" ]; then
-          echo "PYBIN=/usr/local/bin/python3.9" >> $GITHUB_ENV
-        fi
+      - name: Select Python manually
+        run: |
+          echo "Using Python ${{ matrix.python-version }}"
+          if [ "${{ matrix.python-version }}" = "3.8" ]; then
+            PYBIN="python3.8"
+          else
+            PYBIN="python3.9"
+          fi
+          echo "PYBIN=$PYBIN" >> $GITHUB_ENV
 
-    - name: Install dependencies
-      run: |
-        $PYBIN -m pip install --upgrade pip
-        $PYBIN -m pip install pytest
+      - name: Install dependencies
+        run: |
+          $PYBIN -m pip install --upgrade pip
+          $PYBIN -m pip install pytest
 
-    - name: Run tests
-      run: |
-        cd src
-        $PYBIN -m pytest addition.py
+      - name: Run tests
+        run: |
+          cd src
+          $PYBIN -m pytest addition.py
